@@ -1,0 +1,426 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>JAI Club</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+        }
+
+        body {
+            padding: 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 360px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            padding: 24px 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+            position: relative;
+            overflow: hidden;
+            animation: fadeUp 0.8s ease;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 160px;
+            height: 160px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.5), transparent);
+            border-radius: 50%;
+        }
+
+        .card::after {
+            content: "";
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.35), transparent);
+            border-radius: 50%;
+        }
+
+        .logo {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+
+        .logo img {
+            width: 150px;
+            object-fit: contain;
+            border-radius: 50px;
+        }
+
+        .title {
+            text-align: center;
+            color: #fff;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #cbd5e1;
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        .slot-box {
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .slot-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .slot-label {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .slot-count {
+            color: #22c55e;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 50%;
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #22c55e, #84cc16);
+            transition: all 0.5s ease;
+        }
+
+        .inject-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #9333ea, #ec4899);
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 12px 30px rgba(147, 51, 234, 0.35);
+            transition: 0.3s ease;
+        }
+
+        .inject-btn:active {
+            transform: scale(0.96);
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.35s ease;
+            z-index: 999;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            width: 88%;
+            max-width: 320px;
+            background: #111827;
+            border-radius: 24px;
+            padding: 28px 22px;
+            text-align: center;
+            transform: scale(0.8);
+            transition: 0.35s ease;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .modal.show .modal-box {
+            transform: scale(1);
+        }
+
+        .spinner {
+            width: 65px;
+            height: 65px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top: 5px solid #22c55e;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        .modal-title {
+            color: #fff;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .modal-text {
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 400px) {
+            .title {
+                font-size: 24px;
+            }
+
+            .card {
+                padding: 20px 16px;
+            }
+        }
+
+        .user-box {
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .user-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .user-label {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .user-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .user-info-row:first-of-type {
+            border-top: none;
+        }
+
+        .user-info-title {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .user-info-value {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .balance-value {
+            color: #22c55e;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="logo">
+            <img src="/assets/images/logo.jpg" alt="JAI Club Logo">
+        </div>
+
+        <div class="title">JAI Club</div>
+        <div class="subtitle">Premium Predictor Access Panel</div>
+
+        <div class="slot-box">
+            <div class="slot-top">
+                <div class="slot-label">Slots Left</div>
+                <div class="slot-count" id="slotText">0</div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+
+        <div class="user-box" style="display: none;">
+            <div class="user-top">
+                <div class="user-label">User Details</div>
+            </div>
+
+            <div class="user-info-row">
+                <span class="user-info-title">User ID</span>
+                <span class="user-info-value" id="userIdText"></span>
+            </div>
+
+            <div class="user-info-row">
+                <span class="user-info-title">Balance</span>
+                <span class="user-info-value balance-value" id="userBalanceText"></span>
+            </div>
+        </div>
+
+        <button class="inject-btn" id="injectBtn">
+            Inject H@ck
+        </button>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-box">
+            <div class="spinner"></div>
+            <div class="modal-title">Hack Injecting...</div>
+            <div class="modal-text">
+                Please wait while your premium access is being generated.
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        
+        const totalSlots = 10;
+        const remainingSlots = 7;
+
+        const userId = null;
+        const balance = null;
+
+        const progressBar = document.getElementById('progressBar');
+        const slotText = document.getElementById('slotText');
+
+        if (userId) {
+            document.querySelectorAll('.slot-box').forEach(element => {
+                element.style.display = 'none';
+            });
+
+            document.querySelector('.user-box').style.display = 'block';
+
+            document.getElementById('userIdText').innerText = userId;
+            document.getElementById('userBalanceText').innerText = `₹ ${balance}`;
+
+        }
+
+        slotText.textContent = `${remainingSlots} / ${totalSlots}`;
+
+        const percentage = (remainingSlots / totalSlots) * 100;
+        progressBar.style.width = percentage + '%';
+
+        if (percentage <= 30) {
+            progressBar.style.background = 'linear-gradient(90deg, #ef4444, #dc2626)';
+            slotText.style.color = '#ef4444';
+        } else if (percentage <= 60) {
+            progressBar.style.background = 'linear-gradient(90deg, #f59e0b, #facc15)';
+            slotText.style.color = '#f59e0b';
+        } else {
+            progressBar.style.background = 'linear-gradient(90deg, #22c55e, #84cc16)';
+            slotText.style.color = '#22c55e';
+        }
+
+        const injectBtn = document.getElementById('injectBtn');
+        const modal = document.getElementById('modal');
+
+        injectBtn.addEventListener('click', () => {
+            modal.classList.add('show');
+
+            setTimeout(() => {
+                window.location.href = "https://jaiclub24.com/#/register?invitationCode=13335260812";
+            }, 1000);
+        });
+
+        // Disable zoom shortcuts
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('dblclick', function (e) {
+            e.preventDefault();
+        }, { passive: false });
+
+        function androidRun() {
+            if (typeof Android !== "undefined") {
+                const rootBg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+
+                Android.changeStatusBarColor("#1e293b", "light");
+                Android.changeNavigationBarColor("#1e293b", "light");
+
+            }
+        }
+        androidRun();
+
+    </script>
+
+</body>
+
+</html>
